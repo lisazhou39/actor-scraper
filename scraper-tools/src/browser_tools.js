@@ -156,14 +156,6 @@ let lastSnapshotTimestamp = 0;
  */
 const saveSnapshot = async ({ page, $ }) => {
     if (!page && !$) throw new Error('One of parameters "page" or "$" must be provided.');
-    // Throttle snapshots.
-    const now = Date.now();
-    if (now - lastSnapshotTimestamp < SNAPSHOT.TIMEOUT_SECS * 1000) {
-        log.warning('Aborting saveSnapshot(). It can only be invoked once '
-            + `in ${SNAPSHOT.TIMEOUT_SECS} secs to prevent database overloading.`);
-        return;
-    }
-    lastSnapshotTimestamp = now;
 
     if ($) {
         await Apify.setValue(SNAPSHOT.KEYS.HTML, $.html(), { contentType: 'text/html' });
@@ -186,3 +178,4 @@ module.exports = {
     dumpConsole,
     saveSnapshot,
 };
+
