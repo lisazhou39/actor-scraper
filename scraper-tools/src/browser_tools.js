@@ -154,7 +154,7 @@ let lastSnapshotTimestamp = 0;
  * @param {Cheerio} [options.$]
  * @return {Promise}
  */
-const saveSnapshot = async ({ page, $ }) => {
+const saveSnapshot = async ({ page, $ }, key = 'OUTPUT') => {
     if (!page && !$) throw new Error('One of parameters "page" or "$" must be provided.');
     // Throttle snapshots.
     const now = Date.now();
@@ -174,7 +174,7 @@ const saveSnapshot = async ({ page, $ }) => {
         const [html, screenshot] = await Promise.all([htmlP, screenshotP]);
         await Promise.all([
             Apify.setValue(SNAPSHOT.KEYS.HTML, html, { contentType: 'text/html' }),
-            Apify.setValue(SNAPSHOT.KEYS.SCREENSHOT, screenshot, { contentType: 'image/png' }),
+            Apify.setValue(key, screenshot, { contentType: 'image/png' }),
         ]);
     }
 };
